@@ -1,0 +1,18 @@
+
+.bg-color{
+    background-color: cadetblue; 
+}
+
+.btn{
+    width: 93.5px;
+}
+
+.action{
+    display: flex;
+}
+
+.pagination{
+    margin: 0 auto;
+}
+
+
