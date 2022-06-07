@@ -1,6 +1,6 @@
 function postDetail(id) {
     var post_id = id;
-    $.get("api/posts/" + post_id, function (response) {
+    $.get("posts/" + post_id, function (response) {
         var post_title = response.title.escape();
         var post_description = response.description.escape();
         var post_status = response.status;
@@ -12,7 +12,7 @@ function postDetail(id) {
         } else {
             var status = 'Active';
         }
-        $.get("api/users/" + post_created_user_id, function (data) {
+        $.get("users/" + post_created_user_id, function (data) {
             var user_name = data.name;
 
             $('#displayArea').append("<tr><th>Title</th><td>" + post_title + "</td></tr><tr><th>Description</th><td>" + post_description + "</td></tr><tr><th>Status</th><td>" + status + "</td></tr><tr><th>Created at</th><td>" + post_created_at + "</td></tr><tr><th>Created User</th><td>" + user_name + "</td></tr><tr><th>Updated at</th><td>" + post_updated_at + "</td></tr>");
@@ -45,4 +45,27 @@ function displaySelectedPhoto(selectedfile_id, img_id) {
             fileReader.readAsDataURL(fileToLoad);
         }
     }
+}
+
+function userDetail(id) {
+    var user_id = id;
+    $.get("users/" + user_id, function (response) {
+        var user_name = response.name;
+        var user_email = response.email;
+        var user_type = response.type;
+        var user_phone = response.phone;
+        var user_dob = response.dob;
+        var user_address = response.address;
+        var user_profile = response.profile;
+        if (user_type == 0) {
+            var type = 'Admin';
+        } else {
+            var type = 'User';
+        }
+        $('#displayArea').append("<tr><th>Name</th><td>" + user_name + "</td></tr><tr><th>Email</th><td>" + user_email + "</td></tr><tr><th>Type</th><td>" + type + "</td></tr><tr><th>Phone</th><td>" + user_phone + "</td></tr>" + "</td></tr><tr><th>Date of Birth</th><td>" + user_dob + "</td></tr><tr><th>Address</th><td>" + user_address + "</td></tr>");
+        var source = "storage/profile-images/" + user_profile;
+        var href = "users/" + user_id + "/edit";
+        $('.user_profile').attr('src', source);
+        $('#user_profile_id').attr('href', href);
+    });
 }

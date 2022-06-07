@@ -8,7 +8,7 @@
 						<h4 class="title">Create User</h4>
 					</div>
 					<div class="card-body">
-						<form action="" method="post">
+						<form action="{{ url('users/store/collectdata')}}" method="post">
 							@csrf
 							<div class="form-group">
 								<label for="">Name</label>
@@ -79,7 +79,7 @@
 									<div class="invalid-feedback">{{$message}}</div>	
 								@enderror
 							</div>
-							<button type="submit" class="btn btn-primary mr-3">Confirm</button>
+							<button type="submit" class="btn btn-success mr-3">Confirm</button>
 						  <button type="reset" class="btn btn-outline-success">Clear</button>
 						</form>
 					</div>

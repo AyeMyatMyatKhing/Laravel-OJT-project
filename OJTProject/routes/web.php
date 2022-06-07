@@ -27,7 +27,7 @@ Route::put('posts/update/updateConfirm/{id}' , [PostController::class, 'updatePo
 Route::resource('/users' , 'App\Http\Controllers\UserController');
 Route::get('users/create', [UserController::class, 'create']);
 Route::get('users/create/collectdataform' , [UserController::class, 'collectDataForm']);
-//Route::post('users/store/confirmdata', [UserController::class, ''])
+Route::post('users/store/collectdata', [UserController::class, 'storeCollectData']);
 
 Auth::routes();
 

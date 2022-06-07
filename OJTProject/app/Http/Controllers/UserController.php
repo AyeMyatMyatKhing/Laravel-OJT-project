@@ -52,7 +52,7 @@ class UserController extends Controller
         $imageName = uniqid(). '_' . $image->getClientOriginalName();
         $image->storeAs('public/profile-images', $imageName);
         $data['profile'] = $imageName;
-        $request->session()->put('user', $data);
+        $request->session()->put('users', $data);
         return redirect('/users/create/collectdataform');
     }
 
@@ -61,9 +61,14 @@ class UserController extends Controller
         return view('user.create-confirm');
     }
 
-    public function storeConfirm()
+    /**
+     * store collect data
+     * @param \Illuminate\Http\Request
+     */
+    public function storeCollectData(Request $request)
     {
-
+        $this->userService->storeCollectData($request->all());
+        return redirect('/users')->with('successAlert' , 'User has created successfully');
     }
 
     /**
@@ -108,6 +113,26 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->userService->deleteUser($id);
+        return redirect('/users')->with('successAlert' , 'User has deleted successfully.');
+    }
+
+    /**
+     * @param $rule
+     * @param $id
+     */
+    private function validateUser($rule, $id)
+    {
+        return request()->validate([
+            'name' => 'required',
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i|unique:users,email,' . $id,
+            'password' => $rule . '|min:8|regex:/^(?:(?=.*\d)(?=.*[A-Z]).*)$/',
+            'password_confirmation' => $rule . '|same:password',
+            'type' => 'required',
+            'phone' => 'nullable',
+            'address' => 'nullable',
+            'dob' => 'nullable',
+            'profile' => $rule,
+        ]);
     }
 }

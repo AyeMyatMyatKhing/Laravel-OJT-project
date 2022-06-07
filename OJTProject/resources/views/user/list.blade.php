@@ -64,10 +64,10 @@
 									<td>{{date('d-m-Y', strtotime($user->created_at))}}</td>
 									<td>{{date('d-m-Y', strtotime($user->updated_at))}}</td>
 									<td>
-										<form action="" method="post" class="action">
+										<form action="{{url('users/'.$user->id)}}" method="post">
 											@csrf @method('delete')
 											<a href="" type="button" class="btn btn-success">Edit</a>
-											<button type="submit" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+											<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
 										</form>
 									</td>
 								</tr>							
@@ -75,7 +75,7 @@
 							</tbody>
 						</table>
 						{{$users->links()}}
-						<div class="modal-fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitleCenter" aria-hidden="true">
+						<div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitleCenter" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
 									<div class="modal-header">

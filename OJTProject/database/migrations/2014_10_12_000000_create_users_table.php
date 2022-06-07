@@ -21,11 +21,11 @@ return new class extends Migration
             $table->string('password');
             $table->string('type')->default('1');
             $table->string('phone');
-            $table->string('address');
-            $table->date('dob');
+            $table->string('address')->nullable();
+            $table->date('dob')->nullable();
             $table->string('profile')->nullable();
             $table->integer('created_user_id');
-            $table->integer('updated_user_id');
+            $table->integer('updated_user_id')->nullable();
             $table->integer('deleted_user_id')->nullable();
             $table->softDeletes();
             $table->rememberToken();
