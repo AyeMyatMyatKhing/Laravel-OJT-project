@@ -34,4 +34,42 @@ class UserService implements UserServiceInterface
     {
         $this->userDao->deleteUser($id);
     }
+
+    /**
+     * search user
+     * @param $name,$email,$start_date,$end_date
+     * @return user $user
+     */
+    public function search($name,$email,$start_date,$end_date)
+    {
+        return $this->userDao->search($name,$email,$start_date,$end_date);
+    }
+
+    /**
+     * get user for update
+     * @param $id
+     * @return $users
+     */
+    public function findUserById($id)
+    {
+        return $this->userDao->findUserById($id);
+    }
+
+    /**
+     * update user
+     * @param $data,$id
+     */
+    public function updateUser($data ,$id)
+    {
+        $this->userDao->updateUser($data, $id);
+    }
+
+    /**
+     * user profile
+     * @param $id
+     */
+    public function userProfile($id)
+    {
+        return $this->userDao->userProfile($id);
+    }
 }

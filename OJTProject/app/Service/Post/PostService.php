@@ -31,6 +31,14 @@ class postService implements PostServiceInterface
     }
 
     /**
+     * guest post
+     */
+    public function guestPost()
+    {
+        return $this->postDao->guestPost();
+    }
+
+    /**
      * delete post
      */
     public function deletePost($id)
@@ -57,9 +65,22 @@ class postService implements PostServiceInterface
     /**
      * update post
      */
-    public function updatePost($id)
+    public function updatePost($data , $id)
     {
-        return $this->postDao->updatePost($id);
+        return $this->postDao->updatePost($data, $id);
+    }
+
+    /**
+     * show post detail
+     */
+    // public function showDetail($id)
+    // {
+    //     return $this->postDao->showDetail($id);
+    // }
+
+    public function getDetail($id)
+    {
+        return $this->postDao->getDetail($id);
     }
 }
 

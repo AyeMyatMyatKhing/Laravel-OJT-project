@@ -14,7 +14,7 @@ class PostDao implements PostDaoInterface
 	{
 		if (!isset($data['created_user_id'])) 
 		{
-      $data['created_user_id'] = 1;
+      $data['created_user_id'] = auth()->user()->id;
       Post::create($data);
       request()->session()->forget('post');
     } 
@@ -29,7 +29,23 @@ class PostDao implements PostDaoInterface
 	 */
 	public function getPostList()
 	{
-		$posts = Post::orderBy('id', 'desc')->simplePaginate(10);
+		if(auth()->check() && auth()->user()->type == 0)
+		{
+			$posts = Post::orderBy('id', 'desc')->simplePaginate(10);
+		}
+		else
+		{
+			$posts = Post::where('created_user_id' , auth()->user()->id)->simplePaginate(10)->withQueryString();
+		}
+		return $posts;
+	}
+
+	/**
+	 * guest post
+	 */
+	public function guestPost()
+	{
+		$posts = Post::where('status', '=' , 1)->simplePaginate(10)->withQueryString();
 		return $posts;
 	}
 
@@ -45,45 +61,64 @@ class PostDao implements PostDaoInterface
 	{
 		$searchResult = Post::where('title', 'like', "%" . $searchData . "%")
 		                      ->orWhere('description', 'like', "%" . $searchData . "%")
-													->simplePaginate(10)->withQueryString();
-		                      // ->orWhereHas('user', function ($user) use ($searchData) {
-			                    //   $user->where('name', 'like', "%" . $searchData . "%");
-                          // })->simplePaginate(10)->withQueryString();
+		                      ->orWhereHas('user', function ($user) use ($searchData) {
+			                        $user->where('name', 'like', "%" . $searchData . "%");
+                              })->simplePaginate(10)->withQueryString();
 
 		return $searchResult;
 	}
 
 	/**
 	 * find post for update
+	 * @param $id
 	 */
 	public function findPostById($id)
 	{
-		return Post::Find($id);
+		return Post::find($id);
 	}
 
 	/**
 	 * update post
+	 * @param $data,$id
 	 */
-	public function updatePost($id)
+	public function updatePost($data , $id)
 	{
-		// if (!isset($update_data['updated_user_id'])) 
-		// {
-		// 	if (isset($update_data['status'])) 
-		// 	{
-		// 	  $update_data['status'] = 1;
-		// 	} 
-		// 	else 
-		// 	{
-		// 	  $update_data['status'] = 0;
-		// 	}
-		// 	$post_data_to_update['updated_user_id'] = auth()->user()->id;
-		// 	Post::find($id)->update($update_data);
-		// 	request()->session()->forget('posts');
-		// } 
-		// else 
-		// {
-		// 	Post::find($id)->update($update_data);
-		// }
-		Post::find($id)->update($update_data);
+		if (!isset($data['updated_user_id'])) 
+		{
+			if (isset($data['status'])) 
+			{
+			  $data['status'] = 1;
+			} 
+			else 
+			{
+			  $data['status'] = 0;
+			}
+			$data['updated_user_id'] = auth()->user()->id;
+
+			$post = Post::find($id);
+			$post->title  = $data->title;
+			$post->description  = $data->description;
+			$post->updated_user_id  = auth()->user()->id;
+
+			$post->save();
+			request()->session()->forget('posts');
+		} 
+		else 
+		{
+			Post::find($id)->update($data);
+		}
+	}
+
+	/**
+	 * show detail
+	 */
+	// public function showDetail($id)
+	// {
+	// 	return Post::find($id);	
+	// }
+
+	public function getDetail($id)
+	{
+		return Post::where('id',$id)->first();
 	}
 }

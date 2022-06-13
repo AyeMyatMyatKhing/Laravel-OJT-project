@@ -14,6 +14,7 @@ class PostController extends Controller
 
     public function __construct(PostServiceInterface $post_service_interface)
     {
+        $this->middleware(['auth'])->except('guestPost');
         $this->postService = $post_service_interface;
     }
 
@@ -29,6 +30,15 @@ class PostController extends Controller
     }
 
     /**
+     * guset post 
+     */
+    public function guestPost()
+    {
+        $posts = $this->postService->guestPost();
+        return view('post.list')->with('posts',$posts);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -40,7 +50,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->isvalidpost(null);
+        $data = $this->validatePost(null);
         $request->session()->put('post',$data);
         return redirect('posts/create/collectDataForm');
     }
@@ -64,7 +74,7 @@ class PostController extends Controller
     public function storeCollectData(Request $request)
     {
         $this->postService->storeCollectData($request->all());
-        return redirect('/posts')->with('successAlert','Post created successfully');
+        return redirect('/posts')->with('successAlert','Post has created successfully');
     }
 
     /**
@@ -75,7 +85,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        // $postDetail = $this->postService->findPostById($id);
+        // return view('post.list')->with('post' , $postDetail);
     }
 
     /**
@@ -99,7 +110,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update_data = $this->isvalidpost($id);
+        $update_data = $this->validatePost($id);
         $update_data['id'] = $id;
         $request->session()->put('posts' , $update_data);
         return redirect('posts/update/updateCollectData');
@@ -114,10 +125,10 @@ class PostController extends Controller
      * confirm updated post
      * @param int $id
      */
-    public function updatePost($id)
+    public function updatePost(Request $request, $id)
     {
-        $update_data = $this->isvalidpost($id);
-        $this->postService->updatePost($update_data, $id);
+        //$update_post = $this->validatePost($id);
+        $this->postService->updatePost($request, $id);
         return redirect('/posts')->with('successAlert', 'Post has updated successfully');
     }
 
@@ -143,12 +154,12 @@ class PostController extends Controller
     /**
      * validate for unique post
      */
-    public function isvalidpost($id)
+    public function validatePost($id)
     {
         return request()->validate([
             'title' => 'required|min:3|max:255|unique:posts,title,' . $id,
             'description' => 'required| min:5|max:255',
-            'status' => 'nullable'
+            'status' => 'nullable',
         ]);
     }
 }

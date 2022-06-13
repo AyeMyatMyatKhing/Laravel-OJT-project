@@ -70,7 +70,7 @@
 								@enderror
 							</div>
 							<div class="form-group">
-								<label for="profile" class="btn btn-outline-dark update_photo">Profile</label>
+								<label for="update_photo" class="btn btn-outline-dark update_photo">Profile</label>
 								<input type="file" class="@error('profile') is-invalid @enderror" name="profile" 
 								id="update_photo" accept="image/png,image/jpg,image/jpeg" onchange="displaySeletedPhoto('update_photo','image')" 
 								style="width: 0; height: 0; overflow: hidden">

@@ -20,11 +20,12 @@
                 <button class="btn btn-outline-success " type="submit">Search</button>
             </form>
         </div>
-        {{-- @if(Auth::check()) --}}
+        
         <div class="col-md-4">
+					@if(Auth::check())
             <a href="{{ url('posts/create') }}" class="btn btn-info"> Add</a>
             <a href="{{ url('/upload') }}" type="button" class="btn btn-info ">Upload</a>
-            {{-- @endif --}}
+          @endif
             <a href="" class="btn btn-info">Download</a>
         </div>
     </div>
@@ -36,8 +37,10 @@
                     <th class="text-center">Post Title</th>
                     <th class="text-center">Post Description</th>
                     <th class="text-center">Posted User</th>
-                    <th class="text-center">Posted Date</th>               
-                    <th>Action</th>
+                    <th class="text-center">Posted Date</th>  
+										@if (Auth::check())
+										 <th>Action</th>
+										@endif             
                 </thead>
                 <tbody>
                   @foreach ($posts as $item=>$post)
@@ -47,16 +50,18 @@
                           <a class="ttl" data-toggle="modal" data-target="#mymodal" onclick="postDetail({{$post->id}})">{{$post->title}}</a>
                         </td>
                         <td>{{$post->description}}</td>
-                        <td>{{$post->created_user_id}}</td>
+                        <td>{{$post->user->name}}</td>
                         <td>{{date('d-m-Y', strtotime($post->created_at))}}</td>
-                        <td>
-                            <form action="{{ url('posts/'.$post->id) }}" method="post" class="action">
-                                @csrf @method('delete')
-                                <a href="{{url('posts/'.$post->id.'/edit')}}" class="btn btn-success">Edit</button></a>
-                                <button type="submit" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+												@if (Auth::check())
+												  <td>
+													  <form action="{{ url('posts/'.$post->id) }}" method="post" class="action">
+															@csrf @method('delete')
+															<a href="{{url('posts/'.$post->id.'/edit')}}" class="btn btn-success">Edit</button></a>
+															<button type="submit" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+													  </form>
+											    </td>
+												@endif
+                  </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -64,36 +69,36 @@
                {{ $posts->links() }}
             </div>
             <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-									<div class="modal-content">
-											<div class="modal-header">
-													<h4 class="modal-title" id="exampleModalLongTitle">
-															Post Detail
-													</h4>
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-													</button>
-											</div>
-											<div class="modal-body">
-													<div class="card">
-															<div class="card-header">
-															</div>
-															<div class="card-body">
-																	<table class="table table-bordered table-hover">
-																			<tbody id="displayArea">
-																			</tbody>
-																	</table>
-															</div>
-													</div>
-											</div>
-											<div class="modal-footer">
-													<button type="button" class="btn btn-info" data-dismiss="modal">
-															Close
-													</button>
-											</div>
-									</div>
-							</div>
-					</div>
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title" id="exampleModalLongTitle">
+                              Post Detail
+                          </h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="card">
+                              <div class="card-header">
+                              </div>
+                              <div class="card-body">
+                                  <table class="table table-bordered table-hover">
+                                      <tbody id="displayArea">
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-info" data-dismiss="modal">
+                              Close
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
     </div>
 </div>

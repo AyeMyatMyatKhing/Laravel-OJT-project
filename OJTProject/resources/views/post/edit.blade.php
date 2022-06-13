@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
   <div class="container">
-    <div class="row mt-5">
-      <div class="col-md-12">
+    <div class="row mt-5 justify-content-center">
+      <div class="col-md-8">
 				<div class="card text-dark">
 					<div class="card-header">
-						<h1 class="title">Update Post</h1>
+						<h4 class="title">Update Post</h4>
 					</div>
 					<div class="card-body">
 						<form action="{{ url('posts/'.$posts->id)}}" method="POST">
@@ -26,11 +26,12 @@
 										<div class="invalid-feedback">{{$message}}</div>
 								@enderror
 							</div>
-							<div class="custom-control custom-checkbox">
+							<div class="custom-control custom-checkbox mb-3">
 								<input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="status" @if ($posts->status) checked @endif>
 								<label for="status" class="custom-control-label">Status</label>	
 							</div>
-							<a href="{{url('/updatepostconfirm')}}"><button class="btn btn-success">Confirm</button></a>
+							{{-- <a href="{{url('/updatepostconfirm')}}"></a> --}}
+							<button class="btn btn-success">Confirm</button>
 							<button type="button" class="btn btn-outline-success" onclick="clearInputs()">Clear</button>
 						</form>
 					</div>

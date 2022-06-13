@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Contract\Service\User\UserServiceInterface;
+use File;
 
 class UserController extends Controller
 {
@@ -15,6 +16,7 @@ class UserController extends Controller
      */
     public function __construct(UserServiceInterface $user_service_interface)
     {
+        $this->middleware(['isadmin'])->only('index');
         $this->userService = $user_service_interface;
     }
 
@@ -90,7 +92,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $users = $this->userService->findUserById($id);
+        return view('user.edit')->with('users' , $users);
     }
 
     /**
@@ -102,7 +105,38 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $update_data = $this->validateUser('nullable' , $id);
+        $update_data['id'] = $id;
+        if($request->hasFile('profile'))
+        {
+            $old_img = $user->profile;
+            File::delete('storage/profile-images/'.$old_img);
+            $image = $request->profile;
+            $imageName = uniqid() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/profile-images', $imageName);
+            $update_data['profile'] = $imageName;
+        }
+        else
+        {
+            $update_data['profile'] = $user->profile;
+        }
+        $request->session()->put('users' , $update_data);
+        return redirect('users/update/collectData');
+    }
+
+    /**
+     * collect data for update confirm
+     */
+    public function collectData()
+    {
+        return view('user.update-confirm');
+    }
+
+    public function updateUser(Request $request,$id)
+    {
+        $this->userService->updateUser($request->all() , $id);
+        return redirect('/users')->with('successAlert' , 'User has updated successcully.');
     }
 
     /**
@@ -115,6 +149,30 @@ class UserController extends Controller
     {
         $this->userService->deleteUser($id);
         return redirect('/users')->with('successAlert' , 'User has deleted successfully.');
+    }
+
+    /**
+     * search user 
+     *  @param  \Illuminate\Http\Request  $request
+     */
+    public function search(Request $request)
+    {
+        $name = $request->name;
+        $email = $request->email;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+        $users =  $this->userService->search($name,$email,$start_date,$end_date);
+        return view('user.list' , compact('users','name','email','start_date','end_date'));
+    }
+
+    /**
+     * user profile
+     * @param $id
+     */
+    public function userProfile($id)
+    {
+        $user = $this->userService->userProfile($id);
+        return view('user.userProfile')->with('user' , $user);
     }
 
     /**

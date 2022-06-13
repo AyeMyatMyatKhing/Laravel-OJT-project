@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-  <div class="row mt-5">
-      <div class="col-md-12">
+  <div class="row mt-5 justify-content-center">
+      <div class="col-md-8">
           <div class="card text-dark">
               <div class="card-header">
                   <h4 class="title">Post Create Form</h4>

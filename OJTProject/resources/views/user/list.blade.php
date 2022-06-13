@@ -18,7 +18,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-10">
-						<form action="" method="GET" class="form-inline my-2 my-lg-0">
+						<form action="{{url('search_user/')}}" method="GET" class="form-inline my-2 my-lg-0">
 							<input type="search" class="form-control mr-sm-1" placeholder="Name" aria-label="Search" name="name">
 							<input type="search" class="form-control mr-sm-1" placeholder="Email" aria-label="Search" name="email">
 							<input type="date" class="form-control mr-sm-1" placeholder="Created From" aria-label="Search" name="start_date">
@@ -57,7 +57,7 @@
 										</a>
 									</td>
 									<td>{{$user->email}}</td>
-									<td>{{1}}</td>
+									<td>{{$user->createdUser->name}}</td>
 									<td>{{$user->phone}}</td>
 									<td>{{$user->dob}}</td>
 									<td>{{$user->address}}</td>
@@ -66,7 +66,7 @@
 									<td>
 										<form action="{{url('users/'.$user->id)}}" method="post">
 											@csrf @method('delete')
-											<a href="" type="button" class="btn btn-success">Edit</a>
+											<a href="{{ url('users/edit',$user->id)}}" type="button" class="btn btn-success">Edit</a>
 											<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
 										</form>
 									</td>
