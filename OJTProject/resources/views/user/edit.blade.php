@@ -8,7 +8,7 @@
                         <h4 class="title">Edit User</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{url('users/'.$users->id)}}" method="POST">
+                        <form action="{{url('users/'.$users->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf @method('put')
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -71,7 +71,7 @@
                                 @if ($users->profile)
                                    <img src="{{asset('storage/profile-images/'.$users->profile)}}" alt="{{$users->profile}}" id="image" class="imagePreview img-thumbnail" style="width: 100px; height:100px">
                                 @else
-                                    <img src="{{asset('images/default.png')}}" alt="" class="imagePreview img-thumbnail" style="width: 100px; height:100px">
+                                    <img src="{{asset('images/default.png')}}" alt="" class="imagePreview img-thumbnail" style="width: 100px; height:100px" id="image">
                                 @endif
                                 @error('profile')
                                     <div class="invalid-feedback">{{$message}}</div>

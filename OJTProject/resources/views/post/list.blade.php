@@ -24,9 +24,9 @@
         <div class="col-md-4">
 					@if(Auth::check())
             <a href="{{ url('posts/create') }}" class="btn btn-info"> Add</a>
-            <a href="{{ url('/upload') }}" type="button" class="btn btn-info ">Upload</a>
+            <a href="" class="btn btn-info" data-toggle="modal" data-target="#fileuploadmodal">Upload</a>
+            <a href="{{ url('downloadpost') }}" class="btn btn-info">Download</a>
           @endif
-            <a href="" class="btn btn-info">Download</a>
         </div>
     </div>
     <div class="row mt-5">
@@ -98,7 +98,38 @@
                       </div>
                   </div>
               </div>
-          </div>
+            </div>
+					<div class="modal fade" id="fileuploadmodal" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="title">File Upload</h4>
+									<button class="close" data-dismiss="modal" aria-label="close">
+										<span aria-hidden="true">&times;</span>
+									</button>	
+								</div>
+								<div class="modal-body">
+									<div class="card">
+										<div class="card-body">
+											<form action="{{url('/uploadpost')}}" method="POST" enctype="multipart/form-data">
+												{{ csrf_field() }}
+												<div class="form-group">
+													<input type="file" name="file_upload" id="file_upload" required>
+													@error('file_upload')
+															<div class="invalid-feedback">{{$message}}</div>
+													@enderror
+												</div>
+												<div class="button mt-2" style="float: right">
+													<button class="btn btn-info">Import</button>
+												  <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
         </div>
     </div>
 </div>

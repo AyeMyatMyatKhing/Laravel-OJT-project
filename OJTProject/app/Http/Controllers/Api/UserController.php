@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Contract\Service\User\UserServiceInterface;
 
 class UserController extends Controller
 {
@@ -59,7 +60,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = $this->userService->findUserById($id);
+        // $user = User::findOrFail($id);
         Log::info($user);
         return response()->json($user);
     }

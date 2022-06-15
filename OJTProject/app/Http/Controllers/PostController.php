@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Contract\Service\Post\PostServiceInterface;
-
+use File;
 use Illuminate\Http\Request;
+use App\Exports\ExportPost;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PostController extends Controller
 {
@@ -26,7 +28,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postService->getPostList();
-        return view('post.list', compact('posts'));
+        return view('post.list')->with('posts' , $posts);
     }
 
     /**
@@ -62,7 +64,7 @@ class PostController extends Controller
      */
     public function collectDataForm()
     {
-        return view('post.create-confirmation');
+        return view('post.create-confirm');
     }
 
     /**
@@ -144,11 +146,36 @@ class PostController extends Controller
         return redirect('/posts')->with('successAlert','Post has deleted successfully');
     }
 
+    /**
+     * search post
+     */
     public function search(Request $request)
     {
         $searchData = $request->search_data;
         $posts = $this->postService->search($searchData);
         return view('post.list',compact('posts' , 'searchData'));
+    }
+
+    /**
+     * upload file
+     */
+    public function uploadFile(Request $request)
+    {
+        $request->validate([
+            'file_upload' => 'required|mimes:csv,xlsx,txt|max:2048',
+        ]);
+        $file = $request->file_upload;
+        $filename = $file->getClientOriginalName();
+        $file->storeAs('public/files',$filename);
+        return redirect('/posts')->with('successAlert' , 'File upload successfully.'); 
+    }
+
+    /**
+     * download post
+     */
+    public function exportFile()
+    {
+        return Excel::download(new ExportPost, 'posts.xlsx');
     }
 
     /**

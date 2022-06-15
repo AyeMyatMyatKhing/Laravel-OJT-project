@@ -111,7 +111,7 @@
                         </div>
                         <div class="form-group" style="display: none">
                             <label for="update_photo">Profile</label>
-                            <input type="text" class="form-control" value=" {{ request()->session()->get('users')['profile'] }}" name="profile" />
+                            <input type="file" class="form-control" value=" {{ request()->session()->get('users')['profile'] }}" name="profile" />
                             @error('profile')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

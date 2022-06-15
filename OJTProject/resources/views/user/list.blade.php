@@ -52,7 +52,7 @@
 								<tr>
 									<td>{{$users->firstItem() + $item}}</td>
 									<td>
-										<a href="" class="ttl" data-toggal="modal" data-target="#mymodal" onclick="userDetail({{$user->id}})">
+										<a class="ttl" data-toggle="modal" data-target="#mymodal" onclick="userDetail({{$user->id}})">
 											{{$user->name}}
 										</a>
 									</td>
@@ -74,7 +74,9 @@
 								@endforeach
 							</tbody>
 						</table>
-						{{$users->links()}}
+						<div class="pagination">
+							{{$users->links()}}
+						</div>
 						<div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitleCenter" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
@@ -84,7 +86,7 @@
 									<div class="modal-body">
 										<div class="card">
 											<div class="card-header">
-												<img src="" alt="" class="user-profile" style="width: 100px;height: 100px;">
+												<img src="" alt="" class="user_profile" style="width: 100px;height: 100px;">
 											</div>
 											<div class="card-body">
 												<table class="table table-bordered table-hover">

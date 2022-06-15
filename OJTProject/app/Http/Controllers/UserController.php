@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Contract\Service\User\UserServiceInterface;
-use File;
+use Illuminate\Support\Facades\File;
+//use Illuminate\Support\Facades\Validator;
+//use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -49,7 +51,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validateUser('required',null);
+        $data = $this->validateUser('required' , null);
         $image = $request->profile;
         $imageName = uniqid(). '_' . $image->getClientOriginalName();
         $image->storeAs('public/profile-images', $imageName);
@@ -108,10 +110,10 @@ class UserController extends Controller
         $user = User::find($id);
         $update_data = $this->validateUser('nullable' , $id);
         $update_data['id'] = $id;
-        if($request->hasFile('profile'))
+        if($request->profile)
         {
             $old_img = $user->profile;
-            File::delete('storage/profile-images/'.$old_img);
+            File::delete('public/profile-images/'.$old_img);
             $image = $request->profile;
             $imageName = uniqid() . '_' . $image->getClientOriginalName();
             $image->storeAs('public/profile-images', $imageName);
@@ -135,8 +137,8 @@ class UserController extends Controller
 
     public function updateUser(Request $request,$id)
     {
-        $this->userService->updateUser($request->all() , $id);
-        return redirect('/users')->with('successAlert' , 'User has updated successcully.');
+        $this->userService->updateUser($request->all(),$id);
+        return redirect('/posts')->with('successAlert' , 'User has updated successcully.');
     }
 
     /**
@@ -190,7 +192,8 @@ class UserController extends Controller
             'phone' => 'nullable',
             'address' => 'nullable',
             'dob' => 'nullable',
-            'profile' => $rule,
+            'profile' => $rule, 
         ]);
     }
+
 }

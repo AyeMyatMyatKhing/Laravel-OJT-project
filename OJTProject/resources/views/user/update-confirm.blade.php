@@ -6,9 +6,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="title">User Update Confirmation</h4>
+                        <img src="{{ asset('public/profile-images/'. request()->session()->get('users')['profile'])}}" alt="user profile" style="width: 100px;height: 100px">
                     </div>
                     <div class="card-body">
-                        <form action="{{ url('users/update/updateConfirm/'. request()->session()->get('users')['id'])}}" method="POST">
+                        <form action="{{ url('users/update/updateConfirm/'. request()->session()->get('users')['id'])}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="form-group">
@@ -47,6 +48,9 @@
                                 <label for="address">Address</label>
                                 <label for="address">: {{request()->session()->get('users')['address']}}</label>
                                 <input type="hidden" name="address" value="{{request()->session()->get('users')['address']}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="profile" value="{{request()->session()->get('users')['profile']}}">
                             </div>
                             <button class="btn btn-primary">Submit</button>
                             <a href="{{ url()->previous()}}" class="btn btn-outline-primary">Back</a>

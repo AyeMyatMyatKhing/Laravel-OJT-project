@@ -8,8 +8,8 @@
 						<h4 class="title">Create User</h4>
 					</div>
 					<div class="card-body">
-						<form action="{{ url('users/store/collectdata')}}" method="post">
-							@csrf
+						<form action="{{ route('users.store')}}" method="post" enctype="multipart/form-data">
+							{{ csrf_field() }}
 							<div class="form-group">
 								<label for="">Name</label>
 								<input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name">
@@ -32,9 +32,9 @@
 								@enderror
 							</div>
 							<div class="form-group">
-								<label for="confirm-password">Confirm Password</label>
-								<input type="password" class="form-control @error('confirm-password') is-invalid @enderror" name="confirm-password" id="confirm-password">
-								@error('confirm-password')
+								<label for="password_confirmation">Confirm Password</label>
+								<input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="password_confirmation">
+								@error('password_confirmation')
 									<div class="invalid-feedback">{{$message}}</div>
 								@enderror
 							</div>
@@ -72,7 +72,7 @@
 							<div class="form-group">
 								<label for="update_photo" class="btn btn-outline-dark update_photo">Profile</label>
 								<input type="file" class="@error('profile') is-invalid @enderror" name="profile" 
-								id="update_photo" accept="image/png,image/jpg,image/jpeg" onchange="displaySeletedPhoto('update_photo','image')" 
+								id="update_photo" accept="image/png, image/jpg, image/jpeg" onchange="displaySelectedPhoto('update_photo','image')" 
 								style="width: 0; height: 0; overflow: hidden">
 								<img src="{{ asset('images/default.png') }}" alt="" id="image" class="imagePreview img-thumbnail" style="width: 100px; height: 100px" />
 								@error('profile')
